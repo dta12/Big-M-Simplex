@@ -16,18 +16,18 @@ void print_tokens(s_tokens *tok) {
         for (int j = 0; j < tok->num_cols; ++j) {
             printf("(%c, %.1f)\t", tok->values[i][j].type,tok->values[i][j].value);
         }
-        printf("\n");
+        printf("cmp: %s\n", tok->cmps[i]);
     }
 }
 
 void tokenize(s_tokens* tok, int num_eqs, char eqs[MAX_EQUATIONS][MAX_EQUATION_LENGTH]) {
     int row = 0;
     int max_col = 0;
+    int cmp_counter = 0;
     while(row < num_eqs){
         int col = 0;
         float entry;
         bool neg_flag = false;
-
         char *token;
         token = strtok(eqs[row], " ");
         while(token != NULL){
@@ -35,9 +35,12 @@ void tokenize(s_tokens* tok, int num_eqs, char eqs[MAX_EQUATIONS][MAX_EQUATION_L
                 // don't do anythging for this case
             }else if(strcmp(token, "=") == 0){
                 tok->eq++;
+                strcpy(tok->cmps[cmp_counter], token);
+                cmp_counter++;
             }else if(strcmp(token, "-") == 0){
                 neg_flag = true;
-            }else if(token[0] == '-' && strlen(token) == 2 && isalpha(token[1]) != 0){
+            }else if(token[0] == '-'&& strlen(token) == 2 
+                                    && isalpha(token[1]) != 0){
                 // weird edge case to handle where we have '-x' or '-y'
                 entry = -1;
                 tok->values[row][col].value = entry;
@@ -66,8 +69,16 @@ void tokenize(s_tokens* tok, int num_eqs, char eqs[MAX_EQUATIONS][MAX_EQUATION_L
             }else{
                 int leq = strcmp(token, "<=");
                 int geq = strcmp(token, ">=");
-                if(leq == 0) tok->leq++;
-                if(geq == 0) tok->geq++;
+                if(leq == 0) {
+                    tok->leq++; 
+                    strcpy(tok->cmps[cmp_counter], token);
+                    cmp_counter++;
+                }
+                if(geq == 0) {
+                    tok->geq++; 
+                    strcpy(tok->cmps[cmp_counter], token);
+                    cmp_counter++;
+                }
                 // unrecognized token
                 if(leq != 0 && geq != 0) printf("unrecongized token: %s\n", token);
             }

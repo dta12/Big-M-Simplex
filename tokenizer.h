@@ -23,12 +23,16 @@ typedef struct tokens{
     int leq;
     int geq;
     int eq;
+    char cmps[MAX_EQUATIONS][5];
     int num_rows;
     int num_cols;
     s_term **values;
 }s_tokens;
+
 s_tokens *initialize_token_object(s_tokens **tok);
+
 void print_tokens(s_tokens *myTableau);
+
 void tokenize(s_tokens* tok, int num_eqs, char eqs[MAX_EQUATIONS][MAX_EQUATION_LENGTH]);
 
 
