@@ -13,7 +13,7 @@ typedef struct term{
         Type of term we have in the tabelau
             'p'->objective function
             'c'->coefficient
-            'x'->default unassigned
+            'x'->unassigned value in matrix
     */
     char type; 
     float value;

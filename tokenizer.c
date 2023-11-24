@@ -12,8 +12,8 @@ s_tokens *initialize_token_object(s_tokens **tok){
 
 void print_tokens(s_tokens *tok) {
     printf("=:%d\t>=:%d\t<=:%d\t\n", tok->eq, tok->geq, tok->leq);
-    for (int i = 0; i < tok->num_rows; ++i) {
-        for (int j = 0; j < tok->num_cols; ++j) {
+    for (int i = 0; i < tok->num_rows; i++) {
+        for (int j = 0; j < tok->num_cols; j++) {
             printf("(%c, %.1f)\t", tok->values[i][j].type,tok->values[i][j].value);
         }
         printf("cmp: %s\n", tok->cmps[i]);
@@ -94,8 +94,8 @@ void tokenize(s_tokens* tok, int num_eqs, char eqs[MAX_EQUATIONS][MAX_EQUATION_L
     tok->num_cols = max_col;
     tok->num_rows = row;
     //assign default
-    for (int i = 0; i < tok->num_rows; ++i) {
-        for (int j = 0; j < tok->num_cols; ++j) {
+    for (int i = 0; i < tok->num_rows; i++) {
+        for (int j = 0; j < tok->num_cols; j++) {
             char t = tok->values[i][j].type;
             if(t != 'c' && t != 'p') tok->values[i][j].type = 'x';
         }

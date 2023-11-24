@@ -1,86 +1,61 @@
-#include "simplex.h"
-
-s_table *initialize_table_object(s_table **table){
-    (*table) = (s_table*)calloc(1, sizeof(s_table));
-    (*table)->table = (s_cell **)calloc(1, MAX_EQUATIONS*sizeof(s_cell *));
-    for(int i = 0; i < MAX_EQUATIONS; i++){
-        (*table)->table[i] = (s_cell *)calloc(1, MAX_VARIABLES*sizeof(s_cell));
+#include "tabelau.h"
+#include "float.h"
+/*
+    - return -1 if no pivot column can be found
+    otherwise return the column index of the entry with minimum value
+    - no pivot column can be found if all of the objective function entries are >= 0
+*/
+int find_pivot_col(s_tableau *table){
+    float min_val = 0;
+    int curr_index = -1;
+    for (int i = 0; i < table->num_cols - 1; i++){
+        s_cell temp = table->table[table->num_rows - 1][i];
+        if(temp.value < min_val){
+            min_val = temp.value;
+            curr_index = i;
+        }
     }
-    return (*table);
+    return curr_index;
 }
 
-void swap_cells(s_table *table, int r, int c1, int c2){
-    s_cell t = table->table[r][c1];
-    table->table[r][c1].value = table->table[r][c2].value;
-    table->table[r][c2].value = t.value;
+/*
+    - assumes a pivot column is already found 
+    - return -1 if no pivot row can be found
+    otherwise return the row index of the entry with smallest positive ratio as the pivot
+    - if there are no positive elements for that column, then no optimmal solution exists and feasible region is unbounded.
+*/
+int find_pivot_row(s_tableau *table, int c){
+    float min_ratio = FLT_MAX;
+    int curr_index = -1;
+    for (int i = 0; i < table->num_rows - 1; i++){
+        s_cell curr_entry = table->table[table->num_rows - 1][c];
+        float ratio = table->table[table->num_rows - 1][table->num_cols - 1].value/curr_entry.value;
+        if(ratio > 0 && ratio < min_ratio){
+            min_ratio = ratio;
+            curr_index = i;
+        }
+    }
+    return curr_index;
 }
 
-void fill_tabelau(s_table *table, s_tokens* tok){
-    table->num_rows = tok->num_rows;
-    table->num_cols = tok->num_cols + tok->leq + 2*tok->geq;
-    int p_loc = -1;     // location of the objective variable in the row if it has one 
-    int s_counter = 0;  // counter for artifical variables
-    int a_counter = 0;  // counter for slack variables
-
-    int i;
-    for (i = 0; i < tok->num_rows; ++i) {
-        int count_assigned = 0;
-        int j;
-        for (j = 0; j < tok->num_cols; ++j) {
-            //printf("%c %.1f\n", tok->values[i][j].type, tok->values[i][j].value);
-            table->table[i][j].value = tok->values[i][j].value;
-            char t = tok->values[i][j].type;
-            if(t == 'c') count_assigned++;
-            if(t == 'p') p_loc = j;
-        }
-        //move the last coefficient tokens to the end of the matrix
-        if(p_loc == -1){    
-            swap_cells(table, i, count_assigned - 1, table->num_cols - 1);
-        }else{
-            swap_cells(table, i, p_loc, table->num_cols - 2);
-            swap_cells(table, i, p_loc+1, table->num_cols - 1);
-        }
-        // introduce slack variable only
-        if(strcmp(tok->cmps[i], "<=") == 0){
-            table->table[i][(count_assigned - 1) + s_counter].value = 1;
-            s_counter++;
-        }
-        // introduce slack variable and artifical variable
-        if(strcmp(tok->cmps[i], ">=") == 0){   
-            table->table[i][(count_assigned - 1) + s_counter].value = -1;
-            s_counter++;
-            table->table[i][(count_assigned - 1) + s_counter + a_counter].value = 1;
-            a_counter++;
-        }
-        count_assigned = 0;
-    }
-    table->objective_p = table->table[table->num_rows - 1][table->num_cols - 1].value;
-}
-
-void print_tabelau(s_table *table){
-    for (int i = 0; i < table->num_rows; ++i) {
-        for (int j = 0; j < table->num_cols; ++j) {
-            printf("%.1f\t", table->table[i][j].value);
-        }
-        printf("\n");
-    }
-    printf("MAX P = %f", table->objective_p);
+void apply_pivot(s_tableau *table, int r, int c){
+    
 }
 
 int main() {
-    char inputEquations[MAX_EQUATIONS][100];
+    char equations[MAX_EQUATIONS][100];
 
     // Example: Input equations
-    strcpy(inputEquations[0], "x + y <= 10");
-    strcpy(inputEquations[1], "-x + y >= 2");
-    strcpy(inputEquations[2], "-2x - y + p = 5");
+    strcpy(equations[0], "x + y <= 10");
+    strcpy(equations[1], "-x + y >= 2");
+    strcpy(equations[2], "-2x - y + p = 0");
     s_tokens *tokens;
     initialize_token_object(&tokens);
-    tokenize(tokens, 3, inputEquations);
+    tokenize(tokens, 3, equations);
     //print_tokens(tokens);
 
-    s_table *table;
-    initialize_table_object(&table);
+    s_tableau *table;
+    initialize_tabelau_object(&table);
     fill_tabelau(table, tokens);
     print_tabelau(table);
 
