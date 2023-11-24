@@ -78,6 +78,6 @@ void print_tabelau(s_tableau *table){
         }
         printf("\n");
     }
-    printf("MAX P = %.1f", table->objective_p);
+    printf("MAX P = %.1f\n", table->objective_p);
 }
 

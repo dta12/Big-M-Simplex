@@ -28,8 +28,9 @@ int find_pivot_row(s_tableau *table, int c){
     float min_ratio = FLT_MAX;
     int curr_index = -1;
     for (int i = 0; i < table->num_rows - 1; i++){
-        s_cell curr_entry = table->table[table->num_rows - 1][c];
-        float ratio = table->table[table->num_rows - 1][table->num_cols - 1].value/curr_entry.value;
+        s_cell curr_row_entry = table->table[i][c];
+        s_cell last_row_entry = table->table[i][table->num_cols - 1];
+        float ratio = last_row_entry.value/curr_row_entry.value;
         if(ratio > 0 && ratio < min_ratio){
             min_ratio = ratio;
             curr_index = i;
@@ -39,7 +40,21 @@ int find_pivot_row(s_tableau *table, int c){
 }
 
 void apply_pivot(s_tableau *table, int r, int c){
-    
+    // Divide the pivot row by the pivot element
+    float pivot_element = table->table[r][c].value;
+    for (int i = 0; i < table->num_rows; i++) {
+        table->table[r][i].value /= pivot_element;
+    }
+
+    // Perform row operations to make other elements in the pivot column zero
+    for (int i = 0; i < table->num_rows; i++) {
+        if (i != r) {
+            float factor = -table->table[i][c].value;
+            for (int j = 0; j < table->num_cols; ++j) {
+                table->table[i][j].value += factor * table->table[r][j].value;
+            }
+        }
+    }
 }
 
 int main() {
@@ -58,6 +73,7 @@ int main() {
     initialize_tabelau_object(&table);
     fill_tabelau(table, tokens);
     print_tabelau(table);
-
+    apply_pivot(table, 1, 0);
+    print_tabelau(table);
     return 0;
 }
