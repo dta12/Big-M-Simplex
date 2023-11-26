@@ -60,7 +60,7 @@ void fill_tabelau(s_tableau *table, s_tokens* tok){
             //initial symbolic form before any row operations is 'M';
             strcpy(m_cell->symbolic_form, "M");
             a_counter++;
-
+            table->contains_artificals = true;
         }
         count_assigned = 0;
     }
@@ -71,7 +71,7 @@ void print_tabelau(s_tableau *table){
     for (int i = 0; i < table->num_rows; i++) {
         for (int j = 0; j < table->num_cols; j++) {
             char t = table->table[i][j].type;
-            if(t=='m') printf("%s\t", table->table[i][j].symbolic_form);
+            if(t=='m') printf("%.0e\t", table->table[i][j].value);
             else{       
                 printf("%.1f\t", table->table[i][j].value);
             }

@@ -1,9 +1,9 @@
 #include "tokenizer.h"
 
-#define MAX_FORM_WIDTH 20
+#define MAX_FORM_WIDTH 100
 
 // 10^9
-#define M_VALUE 1000000000
+#define M_VALUE 1000000//1000000000
 
 typedef struct cell {
     /*
@@ -20,6 +20,7 @@ typedef struct cell {
 
 typedef struct tableau{
     bool is_finished;
+    bool contains_artificals;
     float objective_p;
     int num_rows;
     int num_cols;
