@@ -1,7 +1,7 @@
 # Big-M-Simplex
 How to run: 
-1. run `gcc -o simplex simplex.c tabelau.c tokenizer.c`
-2. run ```./simplex``` or ```./simplex.exe``` depending on compiler and OS.
+1. To compile run the command: `gcc -o simplex simplex.c tabelau.c tokenizer.c`
+2. To start the program run the command ```./simplex``` or ```./simplex.exe``` depending on compiler and OS.
 
 # Sample output
 This output is from running the current `eq.txt` file in the repository.  
