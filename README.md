@@ -1,5 +1,5 @@
 # Big-M-Simplex
-This program is a linear optimization solver that uses the Big M Simplex Algorithm.  
+This program is a linear optimization solver that uses the Big M Simplex Algorithm. As of now this implementation only supports finding the max, but we know we can easily convert min problems to max's thanks to duality.
 **Warning**:  
 DO NOT USE THIS ON HOMEWORK. I AM NOT RESPONSIBLE IF YOU FAIL. THIS PROJECT IS A WORK IN PROGRESS.
 ## How to run: 
@@ -9,11 +9,18 @@ DO NOT USE THIS ON HOMEWORK. I AM NOT RESPONSIBLE IF YOU FAIL. THIS PROJECT IS A
    ```./simplex``` or ```./simplex.exe```  
    depending on compiler and OS.  
 ## Sample output
-This output is from running the current `eq.txt` file in the repository.  
+This output is from running the current `eq.txt` file in the repository with the following problem:
 ```
+x + 2y <= 40
+2x + 3y <= 72
+-60x - 90y + p = 0
+```
+Then when running `.\simplex.exe` we get the following:
+```
+Initial Tabelau:
 1.0     2.0     1.0     0.0     0.0     40.0
 2.0     3.0     0.0     1.0     0.0     72.0
--60.0   -90.0   0.0     0.0     1.0     0.0
+-60.0   -90.0   0.0     0.0     1.0     0.0 
 MAX P = 0.0
 ------------------------------------------------
 Iteration: 1    Pivot chosen: (r: 1, c: 2)
@@ -26,6 +33,8 @@ Iteration: 2    Pivot chosen: (r: 2, c: 1)
 0.0     1.0     2.0     -1.0    0.0     8.0
 1.0     0.0     -3.0    2.0     0.0     24.0
 0.0     0.0     0.0     30.0    1.0     2160.0
+MAX P = 2160.0
+------------------------------------------------
 The optimal solution has been found
 0.0     1.0     2.0     -1.0    0.0     8.0
 1.0     0.0     -3.0    2.0     0.0     24.0
