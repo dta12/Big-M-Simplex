@@ -1,9 +1,14 @@
 # Big-M-Simplex
-How to run: 
-1. run `gcc -o simplex simplex.c tabelau.c tokenizer.c`
-2. run ```./simplex``` or ```./simplex.exe``` depending on compiler and OS.
-
-# Sample output
+This program is a linear optimization solver that uses the Big M Simplex Algorithm.  
+**Warning**:  
+DO NOT USE THIS ON HOMEWORK. I AM NOT RESPONSIBLE IF YOU FAIL. THIS PROJECT IS A WORK IN PROGRESS.
+## How to run: 
+1. To compile run the command:  
+   `gcc -o simplex simplex.c tabelau.c tokenizer.c`
+3. To start the program run the command  
+   ```./simplex``` or ```./simplex.exe```  
+   depending on compiler and OS.  
+## Sample output
 This output is from running the current `eq.txt` file in the repository.  
 ```
 1.0     2.0     1.0     0.0     0.0     40.0
