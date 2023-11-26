@@ -1,6 +1,6 @@
 #include <stdio.h>
+#include <float.h>
 #include "tabelau.h"
-#include "float.h"
 
 // to make things pretty 
 
